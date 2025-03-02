@@ -1,10 +1,10 @@
- 
 // config.js
-export const API_KEY = 'VOTRE_CLE_API'; // Remplacez par votre clé API
-export const config = {
+const API_ENDPOINT = 'https://restless-mode-4e0e.viserlesommet.workers.dev/?key=';
+const config = {
   tessedit_char_whitelist: '0123456789',
   textord_underline_width: "1",
 };
 
-export const TimeToStartRead = 1 / 10;
-export const TimeToVerify = 3;
+// Expose les variables globalement
+window.API_ENDPOINT = API_ENDPOINT;
+window.config = config;
