@@ -3,6 +3,11 @@
     "status": "VALID",
     "visits": 10,
     "expiry": "2025-06-31"
+  },{
+  "SuperMeGa": {
+    "status": "VALID",
+    "visits": 10,
+    "expiry": "2025-06-31"
   },
   "CLE456": {
     "status": "INVALID",
