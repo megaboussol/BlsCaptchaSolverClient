@@ -1,10 +1,10 @@
 {
-  "CLE123": {
+  "CLE12345": {
     "status": "VALID",
     "visits": 10,
     "expiry": "2025-06-31"
   },
-  "SuperMeGa": {
+  "SuperMeGaa": {
     "status": "VALID",
     "visits": 200,
     "expiry": "2025-06-31"
