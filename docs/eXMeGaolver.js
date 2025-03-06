@@ -2,12 +2,7 @@
 if (window.location.href.toLowerCase().includes("captcha")) {
   (function () {
     'use strict';
-//Parmaetters
- var flouIntensity= 11;  //11 : Augmentez cette valeur pour un voisinage plus large (effet plus flou) ou diminuez-la pour un voisinage plus petit (effet plus net).
- var clarity= 2;  //2 : Augmentez cette valeur pour rendre l'image plus sombre ou diminuez-la pour la rendre plus claire.
- var NiveauGris= 128; //255max  0 min
- var Blackty= 255;//255 : La valeur maximale (blanc) après binarisation.
-                //cv.THRESH_BINARY : Le type de seuillage (ici, binaire)
+
     function _0x2e3e2a() {
       return new Promise((_0x6436b3, _0x5bed88) => {
         GM_xmlhttpRequest({
