@@ -1,3 +1,4 @@
+//
 if (window.location.href.toLowerCase().includes("captcha")) {
   (function () {
     'use strict';
