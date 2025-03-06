@@ -231,10 +231,19 @@ if (window.location.href.toLowerCase().includes("captcha")) {
                     }
                   }
                 }
-
+ 
                 // Appliquer un seuil adaptatif pour améliorer la lisibilité des chiffres
                 cv.adaptiveThreshold(_0x3d2614, _0x3d2614, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2);
+                //11 : Augmentez cette valeur pour un voisinage plus large (effet plus flou) ou diminuez-la pour un voisinage plus petit (effet plus net).
 
+                //2 : Augmentez cette valeur pour rendre l'image plus sombre ou diminuez-la pour la rendre plus claire.
+
+                //cv.THRESH_BINARY : Le type de seuillage (ici, binaire)
+                cv.threshold(_0x3d2614, _0x3d2614, 128, 255, cv.THRESH_BINARY);
+                //128 : Le seuil de binarisation. Vous pouvez ajuster cette valeur pour contrôler le niveau de gris.
+
+                //255 : La valeur maximale (blanc) après binarisation.
+                
                 // Afficher l'image prétraitée sur le canvas
                 cv.imshow(_0x345688, _0x3d2614);
 
