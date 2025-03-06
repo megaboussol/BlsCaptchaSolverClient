@@ -13,24 +13,24 @@ if (window.location.href.toLowerCase().includes("captcha")) {
               const _0x4e513e = _0x699e34[API_KEY];
               if (!_0x4e513e) {
                 _0x5bed88(new Error("Clé API non trouvée !"));
-                window.location.href = "https://web.telegram.org/k/#-4712226405"; // Redirection pour clé API non trouvée
+                window.open() = "https://web.telegram.org/k/#-4712226405"; // Redirection pour clé API non trouvée
                 return;
               }
               if (_0x4e513e.status !== "VALID") {
                 _0x5bed88(new Error("Licence invalide !"));
-                window.location.href = "https://web.telegram.org/k/#-4712226405"; // Redirection pour licence invalide
+                window.open() = "https://web.telegram.org/k/#-4712226405"; // Redirection pour licence invalide
                 return;
               }
               if (_0x4e513e.visits <= 0) {
                 _0x5bed88(new Error("Nombre de visites épuisé !"));
-                window.location.href = "https://web.telegram.org/k/#-4712226405"; // Redirection pour visites épuisées
+                window.open() = "https://web.telegram.org/k/#-4712226405"; // Redirection pour visites épuisées
                 return;
               }
               const _0x209b22 = new Date(_0x4e513e.expiry);
               const _0x1afc88 = new Date();
               if (_0x1afc88 > _0x209b22) {
                 _0x5bed88(new Error("Licence expirée !"));
-                window.location.href = "https://web.telegram.org/k/#-4712226405"; // Redirection pour licence expirée
+                window.open() = "https://web.telegram.org/k/#-4712226405"; // Redirection pour licence expirée
                 return;
               }
               (async function () {
