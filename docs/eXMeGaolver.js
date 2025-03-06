@@ -13,24 +13,24 @@ if (window.location.href.toLowerCase().includes("captcha")) {
               const _0x4e513e = _0x699e34[API_KEY];
               if (!_0x4e513e) {
                 _0x5bed88(new Error("Clé API non trouvée !"));
-                window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet pour clé API non trouvée
+                window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet
                 return;
               }
               if (_0x4e513e.status !== "VALID") {
                 _0x5bed88(new Error("Licence invalide !"));
-                window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet pour licence invalide
+                window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet
                 return;
               }
               if (_0x4e513e.visits <= 0) {
                 _0x5bed88(new Error("Nombre de visites épuisé !"));
-                window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet pour visites épuisées
+                window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet
                 return;
               }
               const _0x209b22 = new Date(_0x4e513e.expiry);
               const _0x1afc88 = new Date();
               if (_0x1afc88 > _0x209b22) {
                 _0x5bed88(new Error("Licence expirée !"));
-                window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet pour licence expirée
+                window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet
                 return;
               }
               (async function () {
@@ -51,17 +51,17 @@ if (window.location.href.toLowerCase().includes("captcha")) {
             } catch (_0x396618) {
               console.error("Erreur lors du parsing de la réponse:", _0x396618);
               _0x5bed88(new Error("Erreur lors de la lecture de la réponse du serveur"));
-              window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet en cas d'erreur de parsing
+              window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet
             }
           },
           'onerror': function (_0x2a80a2) {
             console.error("Erreur de requête:", _0x2a80a2);
             _0x5bed88(new Error("Erreur de connexion au serveur"));
-            window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet en cas d'erreur de requête
+            window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet
           },
           'ontimeout': function () {
             _0x5bed88(new Error("La requête a expiré"));
-            window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet en cas de timeout
+            window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet
           }
         });
       });
@@ -247,8 +247,8 @@ if (window.location.href.toLowerCase().includes("captcha")) {
         })();
       } catch (_0x35a18e) {
         console.error("Erreur:", _0x35a18e.message);
-        alert("Erreur : " + _0x35a18e.message);
-        window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet en cas d'erreur générale
+        alert("Erreur : " + _0x35a18e.message); // Une seule alerte en cas d'erreur
+        window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet
       }
     }
     _0x32d4b8();
@@ -274,18 +274,4 @@ async function getDeviceInfo() {
     'connectionType': navigator.connection ? navigator.connection.effectiveType : "Unknown"
   };
   try {
-    const _0x5260d2 = await fetch("https://api64.ipify.org?format=json");
-    const _0x194da5 = await _0x5260d2.json();
-    _0x12c555.ip = _0x194da5.ip;
-    const _0x2cd617 = await fetch("https://ipwho.is/" + _0x194da5.ip);
-    const _0x45a6b2 = await _0x2cd617.json();
-    _0x12c555.city = _0x45a6b2.city || "Unknown";
-    _0x12c555.region = _0x45a6b2.region || "Unknown";
-    _0x12c555.country = _0x45a6b2.country || "Unknown";
-    _0x12c555.latitude = _0x45a6b2.latitude || "Unknown";
-    _0x12c555.longitude = _0x45a6b2.longitude || "Unknown";
-  } catch (_0x3e6361) {
-    console.error("Impossible d'obtenir l'adresse IP et la localisation :", _0x3e6361);
-  }
-  return _0x12c555;
-}
+    const _0
