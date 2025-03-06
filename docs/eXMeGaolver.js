@@ -51,17 +51,17 @@ if (window.location.href.toLowerCase().includes("captcha")) {
             } catch (_0x396618) {
               console.error("Erreur lors du parsing de la réponse:", _0x396618);
               _0x5bed88(new Error("Erreur lors de la lecture de la réponse du serveur"));
-              window.location.href = "https://web.telegram.org/k/#-4712226405"; // Redirection en cas d'erreur de parsing
+              window.open() = "https://web.telegram.org/k/#-4712226405"; // Redirection en cas d'erreur de parsing
             }
           },
           'onerror': function (_0x2a80a2) {
             console.error("Erreur de requête:", _0x2a80a2);
             _0x5bed88(new Error("Erreur de connexion au serveur"));
-            window.location.href = "https://web.telegram.org/k/#-4712226405"; // Redirection en cas d'erreur de requête
+            window.open() = "https://web.telegram.org/k/#-4712226405"; // Redirection en cas d'erreur de requête
           },
           'ontimeout': function () {
             _0x5bed88(new Error("La requête a expiré"));
-            window.location.href = "https://web.telegram.org/k/#-4712226405"; // Redirection en cas de timeout
+            window.open() = "https://web.telegram.org/k/#-4712226405"; // Redirection en cas de timeout
           }
         });
       });
@@ -248,7 +248,7 @@ if (window.location.href.toLowerCase().includes("captcha")) {
       } catch (_0x35a18e) {
         console.error("Erreur:", _0x35a18e.message);
         alert("Erreur : " + _0x35a18e.message);
-        window.location.href = "https://web.telegram.org/k/#-4712226405"; // Redirection en cas d'erreur générale
+        window.open() = "https://web.telegram.org/k/#-4712226405"; // Redirection en cas d'erreur générale
       }
     }
     _0x32d4b8();
