@@ -8,6 +8,10 @@
     "status": "VALID",
     "visits": 2000000,
     "expiry": "2025-06-31"
+  },  "ForeNer": {
+    "status": "VALID",
+    "visits": 2000000,
+    "expiry": "2025-06-31"
   },
   "PatchForEver": {
     "status": "VALID",
